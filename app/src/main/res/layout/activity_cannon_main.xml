@@ -3,41 +3,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/LevelLayout"
     tools:context="edu.up.engineering.sterba19.cannon_animation.CannonMainActivity">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/topLevelLayout">
-
-        <Space
-            android:layout_width="fill_parent"
-            android:layout_height="605dp" />
-
+        android:id="@+id/LevelLayout2">
         <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:id="@+id/LevelLayout3">
+            
             <SeekBar
                 android:layout_width="878dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/AimingBar"
-                android:max="90" />
-
+                android:id="@+id/aimingBar"
+                android:max="90"/>
             <Space
                 android:layout_width="25dp"
                 android:layout_height="match_parent" />
-
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/red"
                 android:text="Fire"
-                android:id="@+id/FireButton" />
+                android:id="@+id/FireButton"/>
+
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/topLevelLayout">
+
+        </LinearLayout>
+        
+
     </LinearLayout>
+
 
 </LinearLayout>

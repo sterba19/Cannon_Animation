@@ -6,13 +6,18 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.view.MotionEvent;
+import android.widget.SeekBar;
 
 /**
  * Created by sterba19 on 4/2/2017.
  */
 public class CannonAnimator implements Animator{
 
-    private int count,x,y;
+    private int count;
+    public CannonAnimator(int initCount)
+    {
+        count = initCount;
+    }
     @Override
     public int interval() {
         return 30;
@@ -36,17 +41,17 @@ public class CannonAnimator implements Animator{
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void tick(Canvas canvas) {
-
         Paint basePaint = new Paint();
         basePaint.setStyle(Paint.Style.FILL);
-
         basePaint.setColor(Color.rgb(128,128,128));
-        canvas.drawOval(100,100,300,300,basePaint);
+
+        canvas.save();
+        canvas.rotate(count,110,910);
+        canvas.drawOval(100,840,400,980,basePaint);
+        canvas.restore();
 
         basePaint.setColor(Color.rgb(153,76,0));
-        canvas.drawRect(120,120,240,240,basePaint);
-
-
+        canvas.drawRect(120,900,240,1020,basePaint);
     }
 
     @Override
