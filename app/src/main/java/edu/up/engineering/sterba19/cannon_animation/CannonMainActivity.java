@@ -27,11 +27,7 @@ public class CannonMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cannon_main);
 
-        SeekBar sk = (SeekBar)findViewById(R.id.aimingBar);
-        Button fire = (Button)findViewById(R.id.FireButton);
-
-
-        Animator cannonAnim = new CannonAnimator(sk.getProgress());
+        Animator cannonAnim = new CannonAnimator();
         AnimationCanvas myCanvas = new AnimationCanvas(this, cannonAnim);
         LinearLayout mainLayout = (LinearLayout) this.findViewById(R.id.topLevelLayout);
         mainLayout.addView(myCanvas);
