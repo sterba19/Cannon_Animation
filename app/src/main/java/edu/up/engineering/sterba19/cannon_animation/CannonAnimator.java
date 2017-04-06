@@ -9,16 +9,30 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.SeekBar;
 
+import java.util.ArrayList;
+
 /**
  * Created by sterba19 on 4/2/2017.
  */
 public class CannonAnimator implements Animator{
 
-    private int count =0, xBall = 110, yBall = 1030;
-    private boolean moving = false, fired = false;
+    private int count=0, xBallPos = 400, yBallPos = 1030, xBallVel = 40, yBallVel=-20000%(Math.abs(count)+1), accel=1;
+    private int xTarg=1800, yTarg=300, yTarg2 =50;
+    private boolean moving = false;
     private boolean change = false;
     private CustomRect stop = new CustomRect("stop",Color.rgb(255,0,255),120,0,360,200);
     private CustomRect fire = new CustomRect("fire",Color.rgb(255,0,0),480,0,700,200);
+    private CustomCircle cannonBall;
+    private ArrayList<CustomCircle> cannonBalls = new ArrayList<>();
+    private CustomTarget targets[] = new CustomTarget[2];
+    private CustomTarget target1 = new CustomTarget("target1",Color.rgb(0,0,255),xTarg,yTarg,75,false);
+    private CustomTarget target2 = new CustomTarget("target2",Color.rgb(0,0,255),xTarg,yTarg2,75,true);
+
+    public CannonAnimator()
+    {
+        targets[0]=target1;
+        targets[1]=target2;
+    }
     @Override
     public int interval() {
         return 30;
@@ -42,7 +56,12 @@ public class CannonAnimator implements Animator{
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void tick(Canvas canvas) {
-        Log.d("moving is",String.valueOf(moving));
+
+        for (CustomTarget t:targets) {
+            t.drawMe(canvas);
+            moveTarget(t);
+        }
+
         this.changeAngle(moving);
         Paint basePaint = new Paint();
         basePaint.setStyle(Paint.Style.FILL);
@@ -59,20 +78,20 @@ public class CannonAnimator implements Animator{
         stop.drawMe(canvas);
         fire.drawMe(canvas);
 
-        if(fired)
-        {
-            basePaint.setColor(Color.rgb(0,0,0));
+        if(cannonBalls!=null) {
+            for (CustomCircle cannonBall :cannonBalls) {
 
-            while(xBall<600 && yBall<3000) {
+
+                cannonBall.setX(xBallPos);
+                cannonBall.setY(yBallPos);
                 canvas.save();
-                canvas.rotate(count, 110, 1030);
-                canvas.drawCircle(xBall, yBall, 20, basePaint);
+                canvas.rotate(count, 110, yBallPos);
+                cannonBall.drawMe(canvas);
                 canvas.restore();
-                xBall++;
-                yBall++;
+                xBallPos += xBallVel;
+                yBallPos += yBallVel;
+                yBallVel += accel;
             }
-
-            setFired(false);
         }
     }
 
@@ -95,7 +114,8 @@ public class CannonAnimator implements Animator{
 
         if(fire.containsPoint(x,y))
         {
-
+            cannonBall = new CustomCircle("cannonBall",Color.rgb(0,0,0),xBallPos,yBallPos,20);
+            cannonBalls.add(cannonBall);
         }
 
 
@@ -121,8 +141,21 @@ public class CannonAnimator implements Animator{
         }
     }
 
-    public void setMoving(boolean init){ moving = init;}
-    public void setFired(boolean init){ fired = init;}
+    private void moveTarget(CustomTarget t){
+        if (t.getY() == 300){
+            t.setDir(false);
+        }
+        if (t.getY() == 50){
+            t.setDir(true);
+        }
+        if(t.getDir()) {
+            t.setY(t.getY()+15);
+        }
+        if(!t.getDir()){
+            t.setY(t.getY()-15);
+        }
+    }
+    private void setMoving(boolean init){ moving = init;}
 }
 
 
