@@ -91,6 +91,11 @@ public class CannonAnimator implements Animator{
                 xBallPos += xBallVel;
                 yBallPos += yBallVel;
                 yBallVel += accel;
+
+                for (int i = 0; i<2; i++)
+                {
+                    collide(cannonBall,targets[i],canvas);
+                }
             }
         }
     }
@@ -153,6 +158,14 @@ public class CannonAnimator implements Animator{
         }
         if(!t.getDir()){
             t.setY(t.getY()-15);
+        }
+    }
+
+    private void collide(CustomCircle c, CustomTarget t,Canvas canvas)
+    {
+        if(t.containsPoint(c.getX(),c.getY()))
+        {
+            t.setColor(Color.rgb(255,255,255));
         }
     }
     private void setMoving(boolean init){ moving = init;}

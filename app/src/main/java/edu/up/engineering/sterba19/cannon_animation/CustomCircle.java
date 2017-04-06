@@ -69,7 +69,8 @@ public class CustomCircle extends CustomElement {
 
     public void setX(int initX){x=initX;}
     public void setY(int initY){y=initY;}
-    public int getY(){return y;}
+    public int getY(){return y+radius;}
+    public int getX(){return x+radius;}
 
 
 }//class CustomCircle
