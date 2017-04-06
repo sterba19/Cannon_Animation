@@ -57,27 +57,34 @@ public class CannonAnimator implements Animator{
     @Override
     public void tick(Canvas canvas) {
 
+        //Draw and move targets
         for (CustomTarget t:targets) {
             t.drawMe(canvas);
             moveTarget(t);
         }
 
+        //Set angle of cannon
         this.changeAngle(moving);
+        //create paint
         Paint basePaint = new Paint();
         basePaint.setStyle(Paint.Style.FILL);
         basePaint.setColor(Color.rgb(128,128,128));
 
+        //Draw cannon barrell
         canvas.save();
         canvas.rotate(count,110,1030);
         canvas.drawOval(100,960,400,1100,basePaint);
         canvas.restore();
 
+        //draw cannon base
         basePaint.setColor(Color.rgb(153,76,0));
         canvas.drawRect(120,1020,240,1140,basePaint);
 
+        //draw two buttons
         stop.drawMe(canvas);
         fire.drawMe(canvas);
 
+        //Fire cannonBalls
         if(cannonBalls!=null) {
             for (CustomCircle cannonBall :cannonBalls) {
 
@@ -92,6 +99,7 @@ public class CannonAnimator implements Animator{
                 yBallPos += yBallVel;
                 yBallVel += accel;
 
+                //Check for collisions
                 for (int i = 0; i<2; i++)
                 {
                     collide(cannonBall,targets[i],canvas);
@@ -105,6 +113,7 @@ public class CannonAnimator implements Animator{
         int x = (int)event.getX();
         int y = (int)event.getY();
 
+        //Tap stop button
         if(stop.containsPoint(x,y))
         {
             if(moving)
@@ -117,7 +126,8 @@ public class CannonAnimator implements Animator{
             }
         }
 
-        if(fire.containsPoint(x,y))
+        //Tap fire button
+        if (fire.containsPoint(x,y))
         {
             cannonBall = new CustomCircle("cannonBall",Color.rgb(0,0,0),xBallPos,yBallPos,20);
             cannonBalls.add(cannonBall);
@@ -126,6 +136,7 @@ public class CannonAnimator implements Animator{
 
     }
 
+    //Has cannon rotate between 0 & -90 degrees
     private void changeAngle(boolean stopPressed) {
         if (!stopPressed) {
             if (count == -90) {
@@ -146,6 +157,7 @@ public class CannonAnimator implements Animator{
         }
     }
 
+    //Move targets around (Doesn't really work)
     private void moveTarget(CustomTarget t){
         if (t.getY() == 300){
             t.setDir(false);
@@ -161,6 +173,7 @@ public class CannonAnimator implements Animator{
         }
     }
 
+    //Detect collisions
     private void collide(CustomCircle c, CustomTarget t,Canvas canvas)
     {
         if(t.containsPoint(c.getX(),c.getY()))
