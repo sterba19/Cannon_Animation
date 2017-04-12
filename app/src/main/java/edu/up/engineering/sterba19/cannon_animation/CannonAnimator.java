@@ -26,12 +26,12 @@ public class CannonAnimator implements Animator{
     private ArrayList<CustomCircle> cannonBalls = new ArrayList<>();
     private CustomTarget targets[] = new CustomTarget[2];
     private CustomTarget target1 = new CustomTarget("target1",Color.rgb(0,0,255),xTarg,yTarg,75,false);
-    private CustomTarget target2 = new CustomTarget("target2",Color.rgb(0,0,255),xTarg,yTarg2,75,true);
+    //private CustomTarget target2 = new CustomTarget("target2",Color.rgb(0,0,255),xTarg,yTarg2,75,true);
 
     public CannonAnimator()
     {
         targets[0]=target1;
-        targets[1]=target2;
+        //targets[1]=target2;
     }
     @Override
     public int interval() {
@@ -87,7 +87,10 @@ public class CannonAnimator implements Animator{
         //Fire cannonBalls
         if(cannonBalls!=null) {
             for (CustomCircle cannonBall :cannonBalls) {
-
+                if(cannonBall.getX() > canvas.getWidth())
+                {
+                    cannonBalls.remove(cannonBall);
+                }
 
                 cannonBall.setX(xBallPos);
                 cannonBall.setY(yBallPos);
@@ -108,6 +111,32 @@ public class CannonAnimator implements Animator{
         }
     }
 
+    /*
+    @Override
+    public void onTouch(MotionEvent event) {
+        int x = (int)event.getX();
+        int y = (int)event.getY();
+        //Tap stop button
+        if(stop.containsPoint(x,y))
+        {
+            if(moving)
+            {
+                setMoving(false);
+            }
+            else
+            {
+                setMoving(true);
+            }
+        }
+        //Tap fire button
+        if (fire.containsPoint(x,y))
+        {
+            cannonBall = new CustomCircle("cannonBall",Color.rgb(0,0,0),xBallPos,yBallPos,20);
+            cannonBalls.add(cannonBall);
+        }
+    }
+    */
+
     @Override
     public void onTouch(MotionEvent event) {
         int x = (int)event.getX();
@@ -126,13 +155,13 @@ public class CannonAnimator implements Animator{
             }
         }
 
+
         //Tap fire button
         if (fire.containsPoint(x,y))
         {
             cannonBall = new CustomCircle("cannonBall",Color.rgb(0,0,0),xBallPos,yBallPos,20);
             cannonBalls.add(cannonBall);
         }
-
 
     }
 
