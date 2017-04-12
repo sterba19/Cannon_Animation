@@ -17,21 +17,24 @@ import java.util.ArrayList;
 public class CannonAnimator implements Animator{
 
     private int count=0, xBallPos = 400, yBallPos = 1030, xBallVel = 40, yBallVel=-20000%(Math.abs(count)+1), accel=1;
-    private int xTarg=1800, yTarg=300, yTarg2 =50;
+    private int xTarg=1800, yTarg=90, yTarg2 =300, yTarg3 = 900;
     private boolean moving = false;
     private boolean change = false;
     private CustomRect stop = new CustomRect("stop",Color.rgb(255,0,255),120,0,360,200);
     private CustomRect fire = new CustomRect("fire",Color.rgb(255,0,0),480,0,700,200);
+    private CustomRect cannonBase = new CustomRect("base",Color.rgb(153,76,0),120,1020,240,1140);
     private CustomCircle cannonBall;
     private ArrayList<CustomCircle> cannonBalls = new ArrayList<>();
-    private CustomTarget targets[] = new CustomTarget[2];
-    private CustomTarget target1 = new CustomTarget("target1",Color.rgb(0,0,255),xTarg,yTarg,75,false);
-    //private CustomTarget target2 = new CustomTarget("target2",Color.rgb(0,0,255),xTarg,yTarg2,75,true);
+    private CustomTarget targets[] = new CustomTarget[3];
+    private CustomTarget target1 = new CustomTarget("target1",Color.rgb(0,0,255),xTarg,yTarg,75,true);
+    private CustomTarget target2 = new CustomTarget("target2",Color.rgb(0,255,0),xTarg,yTarg2,75,false);
+    private CustomTarget target3 = new CustomTarget("target3",Color.rgb(255,0,255),xTarg,yTarg3,75,true);
 
     public CannonAnimator()
     {
         targets[0]=target1;
-        //targets[1]=target2;
+        targets[1]=target2;
+        targets[2]=target3;
     }
     @Override
     public int interval() {
@@ -58,9 +61,9 @@ public class CannonAnimator implements Animator{
     public void tick(Canvas canvas) {
 
         //Draw and move targets
-        for (CustomTarget t:targets) {
-            t.drawMe(canvas);
-            moveTarget(t);
+        for (int i = 0;i<3;i++) {
+            targets[i].drawMe(canvas);
+            moveTarget(targets[i]);
         }
 
         //Set angle of cannon
@@ -77,8 +80,7 @@ public class CannonAnimator implements Animator{
         canvas.restore();
 
         //draw cannon base
-        basePaint.setColor(Color.rgb(153,76,0));
-        canvas.drawRect(120,1020,240,1140,basePaint);
+        cannonBase.drawMe(canvas);
 
         //draw two buttons
         stop.drawMe(canvas);
@@ -103,9 +105,9 @@ public class CannonAnimator implements Animator{
                 yBallVel += accel;
 
                 //Check for collisions
-                for (int i = 0; i<2; i++)
+                for (int i = 0; i<3; i++)
                 {
-                    collide(cannonBall,targets[i],canvas);
+                    collide(cannonBall,targets[i],canvas,cannonBase);
                 }
             }
         }
@@ -188,10 +190,13 @@ public class CannonAnimator implements Animator{
 
     //Move targets around (Doesn't really work)
     private void moveTarget(CustomTarget t){
-        if (t.getY() == 300){
+        Log.d("Target Y:", Integer.toString(t.getY()));
+        Log.d("Direction: ", Boolean.toString(t.getDir()));
+
+        if (t.getY() == 1200){
             t.setDir(false);
         }
-        if (t.getY() == 50){
+        if (t.getY() == 45){
             t.setDir(true);
         }
         if(t.getDir()) {
@@ -203,11 +208,15 @@ public class CannonAnimator implements Animator{
     }
 
     //Detect collisions
-    private void collide(CustomCircle c, CustomTarget t,Canvas canvas)
+    private void collide(CustomCircle c, CustomTarget t,Canvas canvas, CustomRect r)
     {
         if(t.containsPoint(c.getX(),c.getY()))
         {
             t.setColor(Color.rgb(255,255,255));
+        }
+        if(r.containsPoint(c.getX(),c.getY()))
+        {
+            r.explode(canvas);
         }
     }
     private void setMoving(boolean init){ moving = init;}

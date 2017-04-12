@@ -2,6 +2,8 @@ package edu.up.engineering.sterba19.cannon_animation;
 
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 /**
@@ -60,6 +62,19 @@ public class CustomRect extends CustomElement {
     public void drawHighlight(Canvas canvas) {
         canvas.drawRect(myRect, highlightPaint);
         canvas.drawRect(myRect, outlinePaint);  //keep outline so it stands out
+    }
+
+    public void explode(Canvas canvas)
+    {
+        Paint explosion = new Paint();
+        explosion.setColor(Color.rgb(255,0,0));
+        canvas.drawCircle(240,1140,100,explosion);
+        explosion.setColor(Color.rgb(255,165,0));
+        canvas.drawCircle(100,980,100,explosion);
+        explosion.setColor(Color.rgb(255,215,0));
+        canvas.drawCircle(360,980,100,explosion);
+        explosion.setColor(Color.rgb(0,0,0));
+        canvas.drawText("KaBOOM!!",100,940,explosion);
     }
 
 
